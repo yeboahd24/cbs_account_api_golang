@@ -58,7 +58,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			// fmt.Printf("Token is valid. Claims: %+v\n", claims)
 			payload := map[string]string{"token": tokenString}
 			fmt.Println("payload", payload)
