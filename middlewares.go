@@ -38,7 +38,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		}
 
 		tokenString = tokenString[len("Bearer "):]
-		fmt.Println("Token string:", tokenString)
+		// fmt.Println("Token string:", tokenString)
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			secret := []byte(os.Getenv("SECRET"))
@@ -47,7 +47,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 				fmt.Printf("Unexpected signing method: %v\n", token.Header["alg"])
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
-			fmt.Printf("Token claims: %+v\n", token.Claims)
+			// fmt.Printf("Token claims: %+v\n", token.Claims)
 			return secret, nil
 		})
 
@@ -59,7 +59,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		}
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			fmt.Printf("Token is valid. Claims: %+v\n", claims)
+			// fmt.Printf("Token is valid. Claims: %+v\n", claims)
 			payload := map[string]string{"token": tokenString}
 			fmt.Println("payload", payload)
 			jsonPayload, err := json.Marshal(payload)
@@ -76,7 +76,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 
 			client := &http.Client{}
 			response, err := client.Do(request)
-			fmt.Println("response", response)
+			// fmt.Println("response", response)
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, ErrorResponse{Error: "Error contacting auth service", StatusCode: http.StatusInternalServerError})
