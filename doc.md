@@ -213,7 +213,6 @@ curl -X GET \
 ]
 ```
 
-
 # Profit and Loss
 
 ## Sample Request:

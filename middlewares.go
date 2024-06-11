@@ -13,6 +13,10 @@ import (
 	// "io"
 )
 
+const (
+	authorizationHeaderKey = "Authorization"
+)
+
 // content-type middleware
 func JSONMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -23,8 +27,8 @@ func JSONMiddleware() gin.HandlerFunc {
 
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.Request.Header.Get("Authorization")
-		tokenRequest := c.Request.Header.Get("Authorization")
+		tokenString := c.GetHeader(authorizationHeaderKey)
+		tokenRequest := c.GetHeader(authorizationHeaderKey)
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "No token provided", StatusCode: http.StatusUnauthorized})
 			c.Abort()
