@@ -23,14 +23,15 @@ CREATE TABLE AccountBalance (
 
 CREATE TABLE JournalEntry (
     TransactionID UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    AccountToDebitID UUID,
-    AccountToCreditID UUID,
+    AccountCreditNumber INT,
+    AccountDebitNumber INT,
     Date TIMESTAMP,                                      
     Amount INT,
     Description TEXT,
-    FOREIGN KEY (AccountToDebitID) REFERENCES Account(AccountID),
-    FOREIGN KEY (AccountToCreditID) REFERENCES Account(AccountID)
+    FOREIGN KEY (AccountDebitNumber) REFERENCES Account(AccountNumber),
+    FOREIGN KEY (AccountCreditNumber) REFERENCES Account(AccountNumber)
 );
+
 
 CREATE TABLE Account (
     AccountID UUID DEFAULT uuid_generate_v4() PRIMARY KEY,

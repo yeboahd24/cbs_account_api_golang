@@ -19,7 +19,7 @@ type DBConfig struct {
 func NewDBConfig() *DBConfig {
 	return &DBConfig{
 		Host:     os.Getenv("POSTGRES_HOST"),
-		Port:     5432,
+		Port:     15450,
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		DBName:   os.Getenv("POSTGRES_DB"),
@@ -28,7 +28,7 @@ func NewDBConfig() *DBConfig {
 
 func ConnectDB() (*gorm.DB, error) {
 	dbConfig := NewDBConfig()
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Kolkata",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=require TimeZone=Asia/Kolkata",
 		dbConfig.Host, dbConfig.User, dbConfig.Password, dbConfig.DBName, dbConfig.Port)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
