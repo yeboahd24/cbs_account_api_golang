@@ -46,7 +46,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			secret := []byte(os.Getenv("SECRET"))
-			fmt.Println("Using secret:", string(secret))
+			// fmt.Println("Using secret:", string(secret))
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				fmt.Printf("Unexpected signing method: %v\n", token.Header["alg"])
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -65,7 +65,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			// fmt.Printf("Token is valid. Claims: %+v\n", claims)
 			payload := map[string]string{"token": tokenString}
-			fmt.Println("payload", payload)
+			// fmt.Println("payload", payload)
 			jsonPayload, err := json.Marshal(payload)
 			// fmt.Println("jsonPayload", jsonPayload)
 			if err != nil {

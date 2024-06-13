@@ -7,8 +7,8 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 )
 
 func CreateAccountHandler(db *gorm.DB) gin.HandlerFunc {
@@ -130,8 +130,13 @@ type ListAccountTypeResponse struct {
 
 func ListAccountTypeHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Retrieve pagination query parameters
+		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+		offset := (page - 1) * limit
+
 		var accountTypes []AccountType
-		err := db.Find(&accountTypes).Error
+		err := db.Limit(limit).Offset(offset).Find(&accountTypes).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
 			return
@@ -148,7 +153,7 @@ func ListAccountTypeHandler(db *gorm.DB) gin.HandlerFunc {
 			})
 		}
 
-		c.JSON(http.StatusOK, SuccessResponse{Message:"Account Type List", StatusCode: http.StatusOK, Data: response})
+		c.JSON(http.StatusOK, SuccessResponse{Message: "Account Type List", StatusCode: http.StatusOK, Data: response})
 	}
 }
 
@@ -209,8 +214,13 @@ type ListAccountResponse struct {
 
 func ListAccountHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Retrieve pagination query parameters
+		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+		offset := (page - 1) * limit
+
 		var accounts []Account
-		err := db.Find(&accounts).Error
+		err := db.Limit(limit).Offset(offset).Find(&accounts).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
 			return
@@ -225,7 +235,7 @@ func ListAccountHandler(db *gorm.DB) gin.HandlerFunc {
 			})
 		}
 
-		c.JSON(http.StatusOK, SuccessResponse{Message:"Account List", StatusCode: http.StatusOK, Data: response})
+		c.JSON(http.StatusOK, SuccessResponse{Message: "Account List", StatusCode: http.StatusOK, Data: response})
 	}
 }
 
@@ -237,8 +247,14 @@ type CharOfAccountResponse struct {
 
 func ListChartOfAccountHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		// Retrieve pagination query parameters
+		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+		offset := (page - 1) * limit
+
 		var accounts []ChartOfAccount
-		err := db.Find(&accounts).Error
+		err := db.Limit(limit).Offset(offset).Find(&accounts).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
 			return
@@ -253,7 +269,7 @@ func ListChartOfAccountHandler(db *gorm.DB) gin.HandlerFunc {
 			})
 		}
 
-		c.JSON(http.StatusOK, SuccessResponse{Message:"Chart of Account List", StatusCode: http.StatusOK, Data: response})
+		c.JSON(http.StatusOK, SuccessResponse{Message: "Chart of Account List", StatusCode: http.StatusOK, Data: response})
 	}
 }
 
@@ -334,8 +350,15 @@ type JournalEntryResponse struct {
 
 func ListJournalEntryHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		// Retrieve pagination query parameters
+		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+		offset := (page - 1) * limit
+
+
 		var entries []JournalEntry
-		err := db.Find(&entries).Error
+		err := db.Limit(limit).Offset(offset).Find(&entries).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
 			return
@@ -374,9 +397,7 @@ func ProfitAndLossHandler(db *gorm.DB) gin.HandlerFunc {
 		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
 		offset := (page - 1) * limit
 
-		
-
-		profitAndLossData, err := profitAndLost(db, date, offset, limit)
+		profitAndLossData, err := profitAndLost(db, date, limit, offset)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
 			return
@@ -388,8 +409,13 @@ func ProfitAndLossHandler(db *gorm.DB) gin.HandlerFunc {
 
 func BalanceSheetHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Retrieve pagination query parameters
+		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+		offset := (page - 1) * limit
+
 		var accounts []Account
-		err := db.Find(&accounts).Error
+		err := db.Limit(limit).Offset(offset).Find(&accounts).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
 			return
@@ -402,14 +428,18 @@ func BalanceSheetHandler(db *gorm.DB) gin.HandlerFunc {
 
 		for _, account := range accounts {
 			var balance AccountBalance
-			err = db.Where("accountid =?", account.AccountID).First(&balance).Error
+			err = db.Where("accountid = ?", account.AccountID).First(&balance).Error
 			if err != nil {
 				if err == gorm.ErrRecordNotFound {
 					// Handle accounts with no balance
-					continue
+					balance = AccountBalance{
+						AccountID: account.AccountID,
+						Balance:   0,
+					}
+				} else {
+					c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
+					return
 				}
-				c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
-				return
 			}
 
 			accountData := map[string]interface{}{
@@ -433,6 +463,5 @@ func BalanceSheetHandler(db *gorm.DB) gin.HandlerFunc {
 		balanceSheetData["equity"] = equity
 
 		c.JSON(http.StatusOK, SuccessResponse{Message: "Balance sheet data retrieved successfully", StatusCode: http.StatusOK, Data: balanceSheetData})
-
 	}
 }

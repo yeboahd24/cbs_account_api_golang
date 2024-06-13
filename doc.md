@@ -1,3 +1,5 @@
+# NOTE: All GET requests support `limit` and `page` parameters
+
 # Account Type
 
 ## Sample Request:
