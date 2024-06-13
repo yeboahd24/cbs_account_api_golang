@@ -156,10 +156,10 @@ func updateAccountBalance(db *gorm.DB, accountID uuid.UUID, amount int) error {
 	return nil
 }
 
-func profitAndLost(db *gorm.DB, date *time.Time) (map[string]interface{}, error) {
-	// Fetch all "Expenses" and "Incomes" accounts
+func profitAndLost(db *gorm.DB, date *time.Time, limit, offset int) (map[string]interface{}, error) {
+	// Fetch paginated "Expenses" and "Incomes" accounts
 	var matchingAccounts []Account
-	err := db.Where("name IN ?", []string{"Expenses", "Incomes"}).Find(&matchingAccounts).Error
+	err := db.Where("name IN ?", []string{"Expenses", "Incomes"}).Limit(limit).Offset(offset).Find(&matchingAccounts).Error
 	if err != nil {
 		return nil, err
 	}

@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"time"
+	"strconv"
 )
 
 func CreateAccountHandler(db *gorm.DB) gin.HandlerFunc {
@@ -369,7 +370,13 @@ func ProfitAndLossHandler(db *gorm.DB) gin.HandlerFunc {
 			date = &parsedDate
 		}
 
-		profitAndLossData, err := profitAndLost(db, date)
+		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+		pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
+		offset := (page - 1) * pageSize
+
+		
+
+		profitAndLossData, err := profitAndLost(db, date, offset, pageSize)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error(), StatusCode: http.StatusInternalServerError})
 			return
