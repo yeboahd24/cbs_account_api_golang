@@ -11,6 +11,14 @@ import (
 	"time"
 )
 
+// @summary Create a new account
+// @description Create a new account
+// tags User Authentication
+// @accept  json
+// @produce  json
+// @param account body Account true "Account"
+// @success 200 {object} Account
+// @router /account [post]
 func CreateAccountHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data struct {
@@ -68,6 +76,13 @@ func CreateAccountHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
+// @summary Create a new account type
+// @description Create a new account type
+// @accept  json
+// @produce  json
+// @param accountType body AccountType true "AccountType"
+// @success 200 {object} AccountType
+// @router /accounttype [post]
 func CreateAccountTypeHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data struct {
@@ -128,6 +143,13 @@ type ListAccountTypeResponse struct {
 	EndRange    int       `json:"end_range"`
 }
 
+
+
+// @summary List account type
+// @description List account ListAccountTypeHandler
+// @produce  json
+// @success 200 {object} ListAccountTypeResponse
+// @router /accounttype [get]
 func ListAccountTypeHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Retrieve pagination query parameters
@@ -157,6 +179,13 @@ func ListAccountTypeHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
+// @summary Create a new chart of account
+// @description Create a new chart of account
+// @accept  json
+// @produce  json
+// @param chartOfAccount body ChartOfAccount true "ChartOfAccount"
+// @success 200 {object} ChartOfAccount
+// @router /coa [post]
 func CreateChartOfAccountHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data struct {
@@ -212,6 +241,12 @@ type ListAccountResponse struct {
 	AccountNumber int       `json:"account_number"`
 }
 
+
+// @summary List account
+// @description List account
+// @produce  json
+// @success 200 {object} ListAccountResponse
+// @router /account [get]
 func ListAccountHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Retrieve pagination query parameters
@@ -245,6 +280,12 @@ type CharOfAccountResponse struct {
 	AccountNumber int       `json:"account_number"`
 }
 
+
+// @summary List chart of account
+// @description List chart of account
+// @produce  json
+// @success 200 {object} CharOfAccountResponse
+// @router /coa [get]
 func ListChartOfAccountHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
@@ -287,6 +328,13 @@ func GetAccountIdByAccountNumber(db *gorm.DB, accountNumber uint) (string, error
 	return account.AccountID.String(), nil
 }
 
+// @summary Create a new journal entry
+// @description Create a new journal entry
+// @accept  json
+// @produce  json
+// @param journalEntry body JournalEntry true "JournalEntry"
+// @success 200 {object} JournalEntry
+// @router /journalentry [post]
 func CreateJournalEntryHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data struct {
@@ -348,6 +396,12 @@ type JournalEntryResponse struct {
 	Description         string    `json:"description"`
 }
 
+
+// @summary List journal entry
+// @description List journal entry
+// @produce  json
+// @success 200 {object} JournalEntryResponse
+// @router /journalentry [get]
 func ListJournalEntryHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
@@ -355,7 +409,6 @@ func ListJournalEntryHandler(db *gorm.DB) gin.HandlerFunc {
 		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
 		offset := (page - 1) * limit
-
 
 		var entries []JournalEntry
 		err := db.Limit(limit).Offset(offset).Find(&entries).Error
@@ -380,6 +433,12 @@ func ListJournalEntryHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
+// @summary Profit and loss
+// @description Profit and loss
+// @accept  json
+// @produce  json
+// @success 200 {object} map[string]interface{}
+// @router /profitandloss [get]
 func ProfitAndLossHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		dateStr := c.Query("date")
@@ -407,6 +466,11 @@ func ProfitAndLossHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
+// @summary Balance sheet
+// @description Balance sheet
+// @produce  json
+// @success 200 {object} map[string]interface{}
+// @router /balancesheet [get]
 func BalanceSheetHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Retrieve pagination query parameters

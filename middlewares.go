@@ -29,6 +29,13 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader(authorizationHeaderKey)
 		tokenRequest := c.GetHeader(authorizationHeaderKey)
+
+		// Allow access to Swagger endpoint without auth
+		if strings.HasPrefix(c.Request.URL.Path, "/docs/") {
+			c.Next()
+			return
+		}
+
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "No token provided", StatusCode: http.StatusUnauthorized})
 			c.Abort()

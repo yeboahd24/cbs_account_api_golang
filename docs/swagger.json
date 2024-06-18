@@ -1,0 +1,401 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for Ledger management",
+        "title": "LedgerAPI",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "paths": {
+        "/account": {
+            "get": {
+                "description": "List account",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List account",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.ListAccountResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new account",
+                "parameters": [
+                    {
+                        "description": "Account",
+                        "name": "account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Account"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Account"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounttype": {
+            "get": {
+                "description": "List account ListAccountTypeHandler",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List account type",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.ListAccountTypeResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new account type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new account type",
+                "parameters": [
+                    {
+                        "description": "AccountType",
+                        "name": "accountType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.AccountType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.AccountType"
+                        }
+                    }
+                }
+            }
+        },
+        "/balancesheet": {
+            "get": {
+                "description": "Balance sheet",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Balance sheet",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/coa": {
+            "get": {
+                "description": "List chart of account",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List chart of account",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.CharOfAccountResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new chart of account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new chart of account",
+                "parameters": [
+                    {
+                        "description": "ChartOfAccount",
+                        "name": "chartOfAccount",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.ChartOfAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.ChartOfAccount"
+                        }
+                    }
+                }
+            }
+        },
+        "/journalentry": {
+            "get": {
+                "description": "List journal entry",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List journal entry",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.JournalEntryResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new journal entry",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new journal entry",
+                "parameters": [
+                    {
+                        "description": "JournalEntry",
+                        "name": "journalEntry",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.JournalEntry"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.JournalEntry"
+                        }
+                    }
+                }
+            }
+        },
+        "/profitandloss": {
+            "get": {
+                "description": "Profit and loss",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Profit and loss",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.Account": {
+            "type": "object",
+            "properties": {
+                "account_number": {
+                    "type": "integer"
+                },
+                "accountid": {
+                    "type": "string"
+                },
+                "coa": {
+                    "$ref": "#/definitions/main.ChartOfAccount"
+                },
+                "coa_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.AccountType": {
+            "type": "object",
+            "properties": {
+                "account_id": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_range": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_range": {
+                    "type": "integer"
+                }
+            }
+        },
+        "main.CharOfAccountResponse": {
+            "type": "object",
+            "properties": {
+                "account_number": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.ChartOfAccount": {
+            "type": "object",
+            "properties": {
+                "accountid": {
+                    "type": "string"
+                },
+                "accountnumber": {
+                    "type": "integer"
+                },
+                "accounttypeid": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.JournalEntry": {
+            "type": "object",
+            "properties": {
+                "accounttocredit": {
+                    "$ref": "#/definitions/main.Account"
+                },
+                "accounttocreditid": {
+                    "type": "integer"
+                },
+                "accounttodebit": {
+                    "$ref": "#/definitions/main.Account"
+                },
+                "accounttodebitid": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "transactionid": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.JournalEntryResponse": {
+            "type": "object",
+            "properties": {
+                "accounttocreditid": {
+                    "type": "integer"
+                },
+                "accounttodebitid": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "transactionid": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.ListAccountResponse": {
+            "type": "object",
+            "properties": {
+                "account_number": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.ListAccountTypeResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "end_range": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_range": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "token",
+            "in": "header"
+        }
+    }
+}

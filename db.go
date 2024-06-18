@@ -19,7 +19,7 @@ type DBConfig struct {
 func NewDBConfig() *DBConfig {
 	return &DBConfig{
 		Host:     os.Getenv("POSTGRES_HOST"),
-		Port:     15450,
+		Port:     15450,  // 15450
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		DBName:   os.Getenv("POSTGRES_DB"),

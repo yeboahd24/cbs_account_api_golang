@@ -1,0 +1,262 @@
+definitions:
+  main.Account:
+    properties:
+      account_number:
+        type: integer
+      accountid:
+        type: string
+      coa:
+        $ref: '#/definitions/main.ChartOfAccount'
+      coa_id:
+        type: string
+      name:
+        type: string
+    type: object
+  main.AccountType:
+    properties:
+      account_id:
+        type: string
+      description:
+        type: string
+      end_range:
+        type: integer
+      name:
+        type: string
+      start_range:
+        type: integer
+    type: object
+  main.CharOfAccountResponse:
+    properties:
+      account_number:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  main.ChartOfAccount:
+    properties:
+      accountid:
+        type: string
+      accountnumber:
+        type: integer
+      accounttypeid:
+        type: string
+      name:
+        type: string
+    type: object
+  main.JournalEntry:
+    properties:
+      accounttocredit:
+        $ref: '#/definitions/main.Account'
+      accounttocreditid:
+        type: integer
+      accounttodebit:
+        $ref: '#/definitions/main.Account'
+      accounttodebitid:
+        type: integer
+      amount:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      transactionid:
+        type: string
+    type: object
+  main.JournalEntryResponse:
+    properties:
+      accounttocreditid:
+        type: integer
+      accounttodebitid:
+        type: integer
+      amount:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      transactionid:
+        type: string
+    type: object
+  main.ListAccountResponse:
+    properties:
+      account_number:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  main.ListAccountTypeResponse:
+    properties:
+      description:
+        type: string
+      end_range:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      start_range:
+        type: integer
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API for Ledger management
+  title: LedgerAPI
+  version: "1.0"
+paths:
+  /account:
+    get:
+      description: List account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ListAccountResponse'
+      summary: List account
+    post:
+      consumes:
+      - application/json
+      description: Create a new account
+      parameters:
+      - description: Account
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/main.Account'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Account'
+      summary: Create a new account
+  /accounttype:
+    get:
+      description: List account ListAccountTypeHandler
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ListAccountTypeResponse'
+      summary: List account type
+    post:
+      consumes:
+      - application/json
+      description: Create a new account type
+      parameters:
+      - description: AccountType
+        in: body
+        name: accountType
+        required: true
+        schema:
+          $ref: '#/definitions/main.AccountType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.AccountType'
+      summary: Create a new account type
+  /balancesheet:
+    get:
+      description: Balance sheet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Balance sheet
+  /coa:
+    get:
+      description: List chart of account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.CharOfAccountResponse'
+      summary: List chart of account
+    post:
+      consumes:
+      - application/json
+      description: Create a new chart of account
+      parameters:
+      - description: ChartOfAccount
+        in: body
+        name: chartOfAccount
+        required: true
+        schema:
+          $ref: '#/definitions/main.ChartOfAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ChartOfAccount'
+      summary: Create a new chart of account
+  /journalentry:
+    get:
+      description: List journal entry
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.JournalEntryResponse'
+      summary: List journal entry
+    post:
+      consumes:
+      - application/json
+      description: Create a new journal entry
+      parameters:
+      - description: JournalEntry
+        in: body
+        name: journalEntry
+        required: true
+        schema:
+          $ref: '#/definitions/main.JournalEntry'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.JournalEntry'
+      summary: Create a new journal entry
+  /profitandloss:
+    get:
+      consumes:
+      - application/json
+      description: Profit and loss
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Profit and loss
+securityDefinitions:
+  JWT:
+    in: header
+    name: token
+    type: apiKey
+swagger: "2.0"
